@@ -1,0 +1,39 @@
+syntax = "proto3";
+package com.messages.proto;
+option java_multiple_files = true;
+
+message Stats {
+    string id = 1;
+    double mean = 2;
+    int64 timestamp = 3;
+}
+
+message Node {
+    string id = 1;
+    string ip = 2;
+    int32 port = 3;
+}
+
+message Mean {
+    double mean = 1;
+}
+
+message Coordinator {
+    bool isCoordinator = 1;
+}
+
+message Ack {
+    string id = 1;
+}
+
+// Defining a Service, a Service can have multiple RPC operations
+service NodeService {
+    //Porta l'altro nodo a conoscenza della mia esistenza, e risponde se è lui il coordinatore
+    rpc areYouCoordinator (Node) returns (Coordinator);
+    //Invio le mie medie al coordinatore
+    rpc sendLocalStats (Stats) returns (Mean);
+    //Avvio una nuova elezione
+    rpc startElection (Ack) returns (Ack);
+    //Comunico a tutti che io sono il coordinatore
+    rpc newCoordinator (Node) returns (Ack);
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package com.messages.proto;
+option java_multiple_files = true;
+import "NodeMessage.proto";
+
+message Measure {
+    string id = 1;
+    string type = 2;
+    double value = 3;
+    int64 timestamp = 4;
+}
+
+service SensorService {
+    rpc sendMeasure (stream Measure) returns (Ack);
+}
